@@ -1,11 +1,12 @@
 int fila[] = {22,23,24,25,26,27,28,29,30,31};
 int column[] = {32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53};
 int cont = 0;
+String frase;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  pinMode(A1, INPUT);
+  pinMode(13, INPUT); 
   for(int i = 0; i < 10 ; i++){
     pinMode(fila[i], OUTPUT);
     digitalWrite(fila[i], HIGH);
@@ -54,19 +55,18 @@ String generarCadena(String frase){
 
 void loop() {
   // put your main code here, to run repeatedly:
-  int valor = digitalRead(A1);
-  String frase = "abcdefg";
+  while(Serial.available() == 0){}
+  frase = Serial.readString();
   frase.toUpperCase();
   String cadena = generarCadena(frase);
 
-  if (valor == HIGH){
-    Serial.println(cadena);
+  while (digitalRead(13) == HIGH){
   for (int c = 21; c >= 0 ; c--){
     digitalWrite(column[c],HIGH);
     for (int f = 0; f < 10 ; f++){
       if(cadena[cont%cadena.length()] == '1'){
       digitalWrite(fila[f],LOW);
-      delay(2);
+      delay(1);
       digitalWrite(fila[f],HIGH);
       }
       cont++;
@@ -75,4 +75,5 @@ void loop() {
   }
   cont = cont - 210;
   }
+  cont = 0;
 }
