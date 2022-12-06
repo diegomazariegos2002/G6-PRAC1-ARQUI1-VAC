@@ -21,37 +21,107 @@ void setup() {
 
 String generarCadena(String frase){
   String cadena ="";
-  for(int i =0; i < 22; i++){
-    cadena+="0000000000";
+  for(int i =0; i < 22 ; i++){
+    cadena += "000";
     }
   for(int i =0; i < frase.length() ; i++){
     if (frase[i] == 'A'){
-      cadena += "001111111100111111111100011000110001100011000110001100011000110001100000111111110011111111";
+      cadena += "1FF2102102101FF";
     }
     else if (frase[i] == 'B'){
-      cadena += "111111111111111111111100100011110010001111001000111100100011110010001100110111000011011100";
+      cadena += "3FF2212212211DE";
       }
     else if (frase[i] == 'C'){
-      cadena += "001111110001111111101100000011110000001111000000111100000011110000001101100001100110000110";
+      cadena += "1FE201201201186";
       }
     else if (frase[i] == 'D'){
-      cadena += "111111111111111111111100000011110000001111000000111100000011110000001100111111000011111100";
+      cadena += "3FF2012011020FC";
       }      
     else if (frase[i] == 'E'){
-      cadena += "111111111111111111111100100011110010001111001000111100100011110010001111001000111100000011";
+      cadena += "3FF221221221201";
       }
     else if (frase[i] == 'F'){
-      cadena += "111111111111111111111100110000110011000011001100001100110000110011000011001100001100000000";
+      cadena += "3FF220220220200";
       }
     else if (frase[i] == 'G'){
-      cadena += "001111110001111111101100000011110000001111000000111100000011110010001111001000110100011110";
+      cadena += "1FE20122122123E";
       }
     
-    cadena +="0000000000";
-    cadena +="0000000000";
+    cadena +="000000";
     }
     return cadena;
   }
+
+String generarBinario(String hexdec){
+  String cadena ="";
+  int i = 0;
+ 
+    while (hexdec[i]) {
+ 
+        switch (hexdec[i]) {
+        case '0':
+            cadena+="0000";
+            break;
+        case '1':
+            cadena+="0001";
+            break;
+        case '2':
+            cadena+="0010";
+            break;
+        case '3':
+            cadena+="0011";
+            break;
+        case '4':
+            cadena+="0100";
+            break;
+        case '5':
+            cadena+="0101";
+            break;
+        case '6':
+            cadena+="0110";
+            break;
+        case '7':
+            cadena+="0111";
+            break;
+        case '8':
+            cadena+="1000";
+            break;
+        case '9':
+            cadena+="1001";
+            break;
+        case 'A':
+        case 'a':
+            cadena+="1010";
+            break;
+        case 'B':
+        case 'b':
+            cadena+="1011";
+            break;
+        case 'C':
+        case 'c':
+            cadena+="1100";
+            break;
+        case 'D':
+        case 'd':
+            cadena+="1101";
+            break;
+        case 'E':
+        case 'e':
+            cadena+="1110";
+            break;
+        case 'F':
+        case 'f':
+            cadena+="1111";
+            break;
+        default:
+            break;
+        }
+        i++;
+    }
+    return cadena;
+  }
+
+
 
 void loop() {
   // put your main code here, to run repeatedly:
@@ -63,17 +133,23 @@ void loop() {
   while (digitalRead(13) == HIGH){
   for (int c = 21; c >= 0 ; c--){
     digitalWrite(column[c],HIGH);
+    String hexa = "";
+    hexa+=cadena[cont%cadena.length()];
+    hexa+=cadena[(cont+1)%cadena.length()];
+    hexa+=cadena[(cont+2)%cadena.length()];
+    String letraBinario = generarBinario(hexa); 
+    letraBinario = letraBinario.substring(2, letraBinario.length());
     for (int f = 0; f < 10 ; f++){
-      if(cadena[cont%cadena.length()] == '1'){
-      digitalWrite(fila[f],LOW);
-      delay(1);
-      digitalWrite(fila[f],HIGH);
-      }
-      cont++;
+        if(letraBinario[f] == '1'){
+          digitalWrite(fila[f],LOW);
+          delay(1);
+          digitalWrite(fila[f],HIGH);
+       }
     }
+    cont = cont + 3;
     digitalWrite(column[c],LOW);
   }
-  cont = cont - 210;
+  cont = cont - 63;
   }
   cont = 0;
 }
